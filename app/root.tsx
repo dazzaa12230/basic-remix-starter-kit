@@ -1,32 +1,26 @@
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration
-} from "remix";
-import type { MetaFunction } from "remix";
+import { Global } from '@emotion/react'
+import { LinksFunction, MetaFunction, Outlet } from 'remix'
+import Document from './components/pages/document'
+import { getSeo } from './seo'
+import globalStyles from './styles/global'
 
-export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
-};
+let [seoMeta, seoLinks] = getSeo()
+
+export let meta: MetaFunction = () => ({ ...seoMeta })
+export let links: LinksFunction = () => [
+    ...seoLinks,
+    {
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap',
+        rel: 'stylesheet',
+    },
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+]
 
 export default function App() {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
-      </body>
-    </html>
-  );
+    return (
+        <Document>
+            <Global styles={globalStyles} />
+            <Outlet />
+        </Document>
+    )
 }
